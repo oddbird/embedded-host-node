@@ -18,7 +18,8 @@ const basicRuns = 10;
 await run(async () => {
   await compare('sync', basicRuns, {
     // A, B and C are expected to be identical.
-    // D is expected to be much faster. 
+    // D is expected to be much faster.
+    // J and K are expected to be identical
     'A sequential 1 non-persisted compiler': () => {
       let c;
       c = initCompiler();
@@ -54,10 +55,35 @@ await run(async () => {
       c.compile('./node_modules/bootstrap/scss/bootstrap-utilities.scss')
       c.dispose();
     },
+    'J compile bootstrap 10x non-Compiler': () => {
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      compile('./node_modules/bootstrap/scss/bootstrap.scss');
+    },
+    'K compile bootstrap 10x non-Compiler current': () => {
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+      currentSass.compile('./node_modules/bootstrap/scss/bootstrap.scss');
+    }
   });
   await compare('async', basicRuns, {
     // A, B, and C are expected to be identical
     // D and E are expected to be faster
+    // J and K are expected to be identical
     'A sequential 1 non-persisted compiler': async () => {
       let c;
       c = await initAsyncCompiler();
@@ -103,6 +129,34 @@ await run(async () => {
       ])
       await c.dispose();
     },
+    'J compile bootstrap 10x non-Compiler': async () => {
+      await Promise.all([
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+      ])
+    },
+    'K compile bootstrap 10x non-Compiler current': async () => {
+      await Promise.all([
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+        currentSass.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+      ])
+    }
   });
 
 });
