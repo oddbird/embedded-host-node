@@ -109,6 +109,36 @@ async function branchAsyncCompiler() {
   console.log('async compiler:', end - start);
 }
 
+async function warmup(warmup = false) {
+  const start = performance.now();
+  const compiler = await initAsyncCompiler();
+  const inited = performance.now();
+  if (warmup)
+    await compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss');
+  const warmedUp = performance.now();
+  await Promise.all([
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+    compiler.compileAsync('./node_modules/bootstrap/scss/bootstrap.scss'),
+  ]);
+  const compiled = performance.now();
+  await compiler.dispose();
+  const end = performance.now();
+  console.log();
+  console.log(warmup ? 'With warmup' : 'Without warmup');
+  console.log('to init', inited - start);
+  console.log('first compile', warmedUp - inited);
+  console.log('10 compilations', compiled - warmedUp);
+  console.log('dispose', end - compiled);
+}
+
 async function main() {
   releaseSync();
   await releaseAsync();
@@ -116,5 +146,7 @@ async function main() {
   await branchAsync();
   branchSyncCompiler();
   await branchAsyncCompiler();
+  await warmup(true);
+  await warmup();
 }
 main();
